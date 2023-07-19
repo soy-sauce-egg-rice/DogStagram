@@ -16,9 +16,10 @@ public class Member {
 
     @Id
     @Column(nullable = false)
+    @Setter
     private String id;
 
-//    @Setter
+    @Setter
     @Column(nullable = false)
     private String password;
 
