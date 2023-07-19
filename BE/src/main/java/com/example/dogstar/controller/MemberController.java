@@ -33,9 +33,11 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO){
         try{
-            
+            if(memberDTO == null || memberDTO.getPassword() == null)
+                throw new RuntimeException("Invalid request");
+            return ResponseEntity.ok().body(memberService.saveMember(memberDTO));
         }catch (Exception e){
-
+            return ResponseEntity.badRequest().body(memberDTO);
         }
 
 
