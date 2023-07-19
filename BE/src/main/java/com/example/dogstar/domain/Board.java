@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,35 +19,38 @@ public class Board {
     @Column(name = "id", updatable = false)
     private Long id;
 
-//    private String member_id; 
-    // 나중에 연관관계 매핑
+    @Setter
+    private String memberId;
+//     나중에 연관관계 매핑
 
+    @Setter
     @Column(name = "image") // 이미지 경로를 지정해야 하는지?
     private String img;
 
+    @Setter
     @Column(name = "content", nullable = false)
     private String content;
 
-//    private String originalName;
-//    private String filePath;          // 첨부 파일
-//    private Long fileSize;    // 첨부 이미지
+    @Setter
+    @Column(name = "createDate", nullable = false)
+    private LocalDateTime createDate;
 
-//    @Builder
-//    public Board(String originalName, String content, String filePath, Long fileSize) {
-//        this.originalName = originalName;
-//        this.content = content;
-//        this.filePath = filePath;
-//        this.fileSize = fileSize;
-//    }
+    @Setter
+    @Column(name = "updateDate", nullable = false)
+    private LocalDateTime updateDate;
+
 
     @Builder
     public Board(String img, String content) {
         this.img = img;
         this.content = content;
+        this.createDate = LocalDateTime.now();
+        this.updateDate = this.createDate;
     }
 
     public void update(String content) {
         this.content = content;
+        this.updateDate = LocalDateTime.now();
     }
 
 
