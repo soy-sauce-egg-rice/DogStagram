@@ -16,6 +16,7 @@ public class MemberDTO {
     private String id;
     private String password;
     private String email;
+    private String nickname;
 
     public Member toEntity() {
         return Member.builder()
