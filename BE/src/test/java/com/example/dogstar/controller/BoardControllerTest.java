@@ -1,7 +1,7 @@
 package com.example.dogstar.controller;
 
 import com.example.dogstar.domain.Board;
-import com.example.dogstar.dto.BoardDto;
+import com.example.dogstar.dto.BoardDTO;
 import com.example.dogstar.repository.BoardRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
@@ -21,8 +21,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @AutoConfigureMockMvc // mockmvc 생성
 class BoardControllerTest {
@@ -33,6 +31,7 @@ class BoardControllerTest {
 
     @Autowired
     private WebApplicationContext context;
+
     @Autowired
     BoardRepository boardRepository;
 
@@ -50,7 +49,7 @@ class BoardControllerTest {
         final String url = "/board";
         final String img = "image1";
         final String content = "content1";
-        final BoardDto boardDto = new BoardDto(img,content);
+        final BoardDTO boardDto = new BoardDTO(img,content);
 
         // json 으로 직렬화
         final String requestBody = objectMapper.writeValueAsString(boardDto);
