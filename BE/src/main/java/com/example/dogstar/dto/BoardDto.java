@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class BoardDto {
+public class BoardDTO {
 
     private String img;
     private String content;
