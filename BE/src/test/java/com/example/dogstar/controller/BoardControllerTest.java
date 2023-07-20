@@ -35,24 +35,25 @@ class BoardControllerTest {
     @Autowired
     BoardRepository boardRepository;
 
-    @BeforeEach
-    public void mockMvcSetUp() { // 테스트 하기 전에 db 지우기
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .build();
-        boardRepository.deleteAll();
-    }
+//    @BeforeEach
+//    public void mockMvcSetUp() { // 테스트 하기 전에 db 지우기
+//        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+//                .build();
+//        boardRepository.deleteAll();
+//    }
 
     @DisplayName("addBoard : 게시글 추가")
     @Test
     public void addBoard() throws Exception{
         /* given */
         final String url = "/board";
-        final String img = "image1";
+        final String memberId = "member1";
+        final String image = "image1";
         final String content = "content1";
-        final BoardDTO boardDto = new BoardDTO(img,content);
+        final BoardDTO boardDto = new BoardDTO(memberId, image, content);
 
-        // json 으로 직렬화
-        final String requestBody = objectMapper.writeValueAsString(boardDto);
+        // dto -> entity -> json 으로 직렬화
+        final String requestBody = objectMapper.writeValueAsString(boardDto.toEntity());
 
         /* when */
         // 요청
@@ -63,14 +64,31 @@ class BoardControllerTest {
 
         /* then */
         result.andExpect(MockMvcResultMatchers.status().isCreated());
+        result.andExpect(MockMvcResultMatchers.jsonPath("$.memberId").value(memberId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.image").value(image))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content").value(content));
 
-        List<Board> boards = boardRepository.findAll();
-
-        Assertions.assertThat(boards.size()).isEqualTo(1);
-        Assertions.assertThat(boards.get(0).getImg()).isEqualTo(img);
-        Assertions.assertThat(boards.get(0).getContent()).isEqualTo(content);
+        // BeforeEach랑 같이 사용할 때
+//        List<Board> boards = boardRepository.findAll();
+//        Assertions.assertThat(boards.size()).isEqualTo(1);
+//        Assertions.assertThat(boards.get(0).getImage()).isEqualTo(img);
+//        Assertions.assertThat(boards.get(0).getContent()).isEqualTo(content);
 
 
     }
 
+    @Test 
+    @DisplayName("findAllBoards : 모든 게시글 조회")
+    void findAllBoards() throws Exception {
+        final String url = "/board";
+
+        /* when */
+        // 요청
+        ResultActions result = mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+                .accept(MediaType.APPLICATION_JSON_VALUE));
+
+        /* then */
+        result.andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }

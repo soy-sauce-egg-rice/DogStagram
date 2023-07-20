@@ -28,6 +28,6 @@ public class Member {
     private String email;
 
     @Setter
-    @ColumnDefault("user")
+//    @ColumnDefault("user")
     private String role;
 }

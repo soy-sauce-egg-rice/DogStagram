@@ -25,7 +25,7 @@ public class Board {
 
     @Setter
     @Column(name = "image") // 이미지 경로를 지정해야 하는지?
-    private String img;
+    private String image;
 
     @Setter
     @Column(name = "content", nullable = false)
@@ -41,8 +41,9 @@ public class Board {
 
 
     @Builder
-    public Board(String img, String content) {
-        this.img = img;
+    public Board(String image, String content ,String memberId) {
+        this.memberId = memberId;
+        this.image = image;
         this.content = content;
         this.createDate = LocalDateTime.now();
         this.updateDate = this.createDate;

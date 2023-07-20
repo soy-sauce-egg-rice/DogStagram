@@ -17,7 +17,12 @@ public class BoardService {
     public Board save(BoardDTO boardDto) {
         return boardRepository.save(boardDto.toEntity());
     }
-    public List<Board> boardList() {
+    public List<Board> findAll() {
         return boardRepository.findAll();
+    }
+
+    public Board findById(Long id){ // "게시글 하나 상세 조회"
+        return boardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("not found" + id));
     }
 }

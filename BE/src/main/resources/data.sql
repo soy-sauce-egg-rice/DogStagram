@@ -1,0 +1,6 @@
+insert into board (memberid, image, content, createDate, updateDate)
+values ('member1', 'image1', 'content1', now,now)
+insert into board (memberid, image, content, createDate, updateDate)
+values ('member1', 'image2', 'content2', now,now)
+insert into board (memberid, image, content, createDate, updateDate)
+values ('member1', 'image3', 'content3', now,now)
