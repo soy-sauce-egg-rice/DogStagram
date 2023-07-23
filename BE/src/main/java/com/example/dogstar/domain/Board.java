@@ -49,7 +49,8 @@ public class Board {
         this.updateDate = this.createDate;
     }
 
-    public void update(String content) {
+    public void update(String image, String content) {
+        this.image = image;
         this.content = content;
         this.updateDate = LocalDateTime.now();
     }

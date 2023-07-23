@@ -6,6 +6,7 @@ import com.example.dogstar.dto.ResponseDTO;
 import com.example.dogstar.service.BoardService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,32 @@ public class BoardController {
     public ResponseEntity<?> findAllBoards() {
         List<Board> boaorList = boardService.findAll();
         ResponseDTO<Board> response = ResponseDTO.<Board>builder().data(boaorList).build();
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findBoard(@PathVariable long id) {
+        try {
+            Board board = boardService.findById(id);
+            ResponseDTO<Board> response = ResponseDTO.<Board>builder().board(board).build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            ResponseDTO response = ResponseDTO.builder().error(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBoard(@PathVariable long id) {
+        boardService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateBoard(@PathVariable long id,
+                                         @RequestBody BoardDTO boardDTO){
+        Board updatedBoard = boardService.update(id, boardDTO);
+        ResponseDTO<Board> response = ResponseDTO.<Board>builder().board(updatedBoard).build();
         return ResponseEntity.ok().body(response);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.dogstar.dto;
 
 
+import com.example.dogstar.domain.Board;
+import com.example.dogstar.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +17,6 @@ import java.util.List;
 public class ResponseDTO<T> {
     private String error;
     private List<T> data;
+    private Board board;
+    private Member member;
 }
