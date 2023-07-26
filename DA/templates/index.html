@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Analysis</title>
+</head>
+<body>
+    <h2>이미지 분석</h2>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="image-input" name="image">
+        <input type="submit" value="분석">
+    </form>
+
+    <div id="result" style="display: none;">
+        <h2>분석 결과</h2>
+        <p id="predicted-label"></p>
+        <p id="match-status"></p>
+    </div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('image-input');
+            const file = fileInput.files[0];
+
+            const formDate = new FormData();
+            formDate.append('image', file);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formDate
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('predicted-label').innerText = '예측된 품종: ' + result.predicted_label;
+                document.getElementById('match-status').innerText = '일치 여부: ' + (result.match ? '맞음' : '틑림');
+                document.getElementById('result').style.display = 'block';
+            })
+            .catch(error => console.error('에러 발생:', error));
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from sklearn.preprocessing import LabelEncoder
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -50,22 +50,31 @@ def load_model():
 
     # CNN 모델 구성
     model = keras.Sequential([
-        layers.Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(image_height, image_width, channels)),
-        layers.MaxPooling2D(pool_size=(2, 2)),
+        layers.Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(image_height, image_width, channels)), #Conv2D
+        layers.MaxPooling2D(pool_size=(2, 2)), # MaxPooling2D 2개 정수의 튜플, 축소인수 ex 두 공간차원에 대한 반으로 축소
+        layers.Dropout(0.25), #Dropout 과적합 방지
         layers.Conv2D(64, kernel_size=(3, 3), activation='relu'),
         layers.MaxPooling2D(pool_size=(2, 2)),
-        layers.Flatten(),
-        layers.Dense(128, activation='relu'),
+        layers.Dropout(0.25),
+        layers.Conv2D(128, kernel_size=(3, 3), activation='relu'),
+        layers.MaxPooling2D(pool_size=(2, 2)),
+        layers.Dropout(0.25),
+        layers.Flatten(), # 입력 데이터를 1차원으로 평탄화
+        layers.Dense(256, activation='relu'),
         layers.Dense(num_classes, activation='softmax')
     ])
 
     # 모델 컴파일
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='SGD', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # 모델 학습
     model.fit(X, y, batch_size=32, epochs=10, validation_split=0.2)
 
     return model, label_encoder
+
+@app.route('/')
+def index():
+    return render_template('index.html'); 
 
 @app.route('/predict', methods=['POST'])
 def predict():
