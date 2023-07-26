@@ -48,21 +48,16 @@ class MemberControllerTest {
     @DisplayName("회원 가입 확인")
     public void join() throws Exception {
         /* given */
-        final String url = "/member";
-        final String id = "testMember123";
+        final String url = "/join";
+//        final String id = "testMember123";
         final String password = "testPassword";
         final String email = "testEmail";
         final MemberDTO memberDTO = MemberDTO.builder()
-                .id(id)
                 .password(password)
                 .email(email)
                 .build();
 
         /* when */
-        // 저장
-//        Member joinedMember = memberService.saveMember(memberDTO); // 회원가입
-//        Member joinedMember = memberRepository.save(memberDTO.toEntity());
-
 //         json 으로 직렬화
         final String requestBody = objectMapper.writeValueAsString(memberDTO);
 
@@ -73,11 +68,8 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(requestBody));
 
-//        Member member = memberService.findMember(joinedMember).get();
-//        Member member = memberRepository.findById(joinedMember.getId()).get();
-
         /* then */
         result.andExpect(MockMvcResultMatchers.status().is(200));
-//        Assertions.assertThat(member).isEqualTo(joinedMember);
+
     }
 }

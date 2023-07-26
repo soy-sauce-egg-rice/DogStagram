@@ -1,9 +1,9 @@
 spring:
     jpa:
-        hibernate:
-#            ddl-auto: update
-            hbm2ddl.auto: update
         show-sql: true
+        hibernate:
+#            ddl-auto: create
+            hbm2ddl.auto: update
         properties:
             hibernate:
                 format_sql: true
@@ -16,3 +16,6 @@ spring:
     h2:
         console:
             enabled: true
+jwt:
+    issuer: tokenIssuer
+    secret_key: study
