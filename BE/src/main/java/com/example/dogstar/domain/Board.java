@@ -17,10 +17,10 @@ public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
-    private Long id;
+    private Long id; // 게시글 아이디
 
     @Setter
-    private String memberId;
+    private Long memberId; // 유저 아이디
 //     나중에 연관관계 매핑
 
     @Setter
@@ -41,7 +41,7 @@ public class Board {
 
 
     @Builder
-    public Board(String image, String content ,String memberId) {
+    public Board(String image, String content ,Long memberId) {
         this.memberId = memberId;
         this.image = image;
         this.content = content;

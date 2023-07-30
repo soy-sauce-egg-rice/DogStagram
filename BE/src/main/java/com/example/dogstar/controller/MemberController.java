@@ -37,16 +37,16 @@ public class MemberController {
     }
 
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO){
-        try{
-            if(memberDTO == null || memberDTO.getPassword() == null) throw new RuntimeException("Invalid request");
-            return ResponseEntity.ok().body(memberService.login(memberDTO));
-        }catch (Exception e){
-            ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(responseDTO);
-        }
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO){
+//        try{
+//            if(memberDTO == null || memberDTO.getPassword() == null) throw new RuntimeException("Invalid request");
+//            return ResponseEntity.ok().body(memberService.login(memberDTO));
+//        }catch (Exception e){
+//            ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();
+//            return ResponseEntity.badRequest().body(responseDTO);
+//        }
+//    }
 
 //    @PostMapping("/memberdetails")
 //    public ResponseEntity<?> memberdetails(@RequestBody MemberDTO memberDTO){

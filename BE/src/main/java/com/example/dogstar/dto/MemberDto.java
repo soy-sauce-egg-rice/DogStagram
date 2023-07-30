@@ -9,7 +9,7 @@ import lombok.*;
 public class MemberDTO {
 
     private String token;
-    private String id;
+    private Long id;
     private String password;
     private String email;
     private String nickname;

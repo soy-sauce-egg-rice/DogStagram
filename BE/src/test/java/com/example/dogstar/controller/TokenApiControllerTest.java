@@ -4,7 +4,6 @@ import com.example.dogstar.config.jwt.JwtFactory;
 import com.example.dogstar.config.jwt.JwtProperties;
 import com.example.dogstar.domain.Member;
 import com.example.dogstar.domain.RefreshToken;
-import com.example.dogstar.dto.CreateAccessTokenRequest;
 import com.example.dogstar.repository.MemberRepository;
 import com.example.dogstar.repository.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,8 +22,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc

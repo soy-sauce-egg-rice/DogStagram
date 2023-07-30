@@ -1,5 +1,6 @@
 package com.example.dogstar.config;
 
+import com.example.dogstar.config.jwt.TokenProvider;
 import com.example.dogstar.domain.Member;
 import com.example.dogstar.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +14,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
 @Configuration
 public class WebSecurityConfig{
 
     private final UserDetailsService memberService;
+//    private final MemberService memberService;
+    private final TokenProvider tokenProvider;
 
     //
 //    @Bean
@@ -32,21 +36,20 @@ public class WebSecurityConfig{
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http.
-                authorizeRequests()
-                    .requestMatchers("/login", "/join", "").permitAll()
-//                    .anyRequest().authenticated()
-                    .anyRequest().hasAnyRole("user")
+                authorizeHttpRequests()
+                    .requestMatchers("/login", "/join", "/signup", "/user").permitAll()
+                    .anyRequest().authenticated()
+//                    .anyRequest().hasAnyRole("user")
                 .and()
-//                .and()
 //                .formLogin()
-//                    .loginPage("/login")
-//                    .defaultSuccessUrl("/boards")
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/articles")
 //                .and()
-//                .logout()
-//                    .logoutSuccessUrl("/login")
-//                    .invalidateHttpSession(true)
-//                .and()
+//                .addFilterBefore(new TokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new TokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
+                .cors()
+                .and()
                 .build();
     }
     @Bean

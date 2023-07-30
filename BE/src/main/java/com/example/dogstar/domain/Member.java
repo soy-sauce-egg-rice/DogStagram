@@ -32,19 +32,19 @@ public class Member implements UserDetails { // UserDetails 상속
     private String password;
 
     @Setter
-//    @ColumnDefault("user")
+    @Column(name = "role", nullable = false)
     private String role;
 
     @Builder
     public Member(String email, String password){
         this.email = email;
         this.password = password;
-        this.role = "user";
     }
 
     @Override // 권한 반환 부
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+//        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

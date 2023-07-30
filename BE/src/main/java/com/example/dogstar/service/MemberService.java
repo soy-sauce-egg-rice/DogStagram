@@ -1,5 +1,6 @@
 package com.example.dogstar.service;
 
+import com.example.dogstar.config.jwt.TokenProvider;
 import com.example.dogstar.domain.Member;
 import com.example.dogstar.dto.MemberDTO;
 import com.example.dogstar.repository.MemberRepository;
@@ -7,9 +8,11 @@ import com.example.dogstar.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class MemberService {
 //    @Autowired
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     public Long saveMember(MemberDTO memberDTO) {
         // member 객체
@@ -36,23 +40,30 @@ public class MemberService {
     }
 
     public Member findMember (Member member) {
-        return memberRepository.findByEmail(member.getEmail()).get();
+        return memberRepository.findByEmail(member.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Unexpected member Email"));
     }
 
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
+                .orElseThrow(() -> new IllegalArgumentException("Unexpected member Id"));
     }
 
-    public String login(MemberDTO memberDTO) {
+    public MemberDTO login(MemberDTO memberDTO) {
         Member loginedMember = memberRepository.findByEmail(memberDTO.getEmail()).get();
 
         // 비밀번호 검사
-        if (bCryptPasswordEncoder.matches(memberDTO.getPassword(), loginedMember.getPassword())){
+        if (bCryptPasswordEncoder.matches(memberDTO.getPassword(), loginedMember.getPassword())) {
             // refresh token 검증
 //            if (refreshTokenRepository.findByUserId(loginedMember.getId()).get()
 //            )
-            return loginedMember.getEmail();
+            String token = tokenProvider.generateToken(loginedMember, Duration.ofHours(2));
+            MemberDTO dto = MemberDTO.builder()
+                    .token(token)
+                    .id(loginedMember.getId())
+                    .email(loginedMember.getEmail())
+                    .build();
+            return dto;
         } else throw new RuntimeException("비밀번호 불일치");
     }
 }
