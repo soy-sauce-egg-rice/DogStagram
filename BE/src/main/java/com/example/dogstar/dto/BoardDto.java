@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 @Getter
 public class BoardDTO {
 
-    private String memberId;
+    @Setter
+    private Long memberId;
     private String image;
     private String content;
 

@@ -1,18 +1,23 @@
 spring:
     jpa:
-        hibernate:
-#            ddl-auto: update
-            hbm2ddl.auto: update
         show-sql: true
+        hibernate:
+            ddl-auto: update
+#            hbm2ddl.auto: update
         properties:
             hibernate:
                 format_sql: true
 #        defer-datasource-initialization: true
     datasource:
-        driver-class-name: org.h2.Driver
-        url: jdbc:h2:tcp://localhost/~/dogstar
-        username: sa
-        password:
+#        driver-class-name: org.h2.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
+#        url: jdbc:h2:tcp://localhost/~/dogstar
+        url: jdbc:mysql://localhost:3306/dogstar?serverTimezone=UTC
+        username: root
+        password: tiger
     h2:
         console:
             enabled: true
+jwt:
+    issuer: tokenIssuer
+    secret_key: 7AE91772DC529545C19978668EBE6

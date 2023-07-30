@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Request;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,9 +22,10 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<?> addBoard(@RequestBody BoardDTO boardDto) {
+    public ResponseEntity<?> addBoard(@AuthenticationPrincipal Long memberId, @RequestBody BoardDTO boardDto) {
         try {
             if (boardDto == null || boardDto.getMemberId() == null) throw new RuntimeException("check your request");
+            boardDto.setMemberId(memberId);
             Board savedBoard = boardService.save(boardDto);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(savedBoard);
@@ -34,14 +36,14 @@ public class BoardController {
     }
 
     @GetMapping // db board 에 있는 모든 게시글 조회
-    public ResponseEntity<?> findAllBoards() {
+    public ResponseEntity<?> findAllBoards(@AuthenticationPrincipal Long memberId) {
         List<Board> boaorList = boardService.findAll();
         ResponseDTO<Board> response = ResponseDTO.<Board>builder().data(boaorList).build();
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findBoard(@PathVariable long id) {
+    public ResponseEntity<?> findBoard(@AuthenticationPrincipal Long memberId, @PathVariable long id) {
         try {
             Board board = boardService.findById(id);
             ResponseDTO<Board> response = ResponseDTO.<Board>builder().board(board).build();
@@ -53,13 +55,14 @@ public class BoardController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBoard(@PathVariable long id) {
+    public ResponseEntity<Void> deleteBoard(@AuthenticationPrincipal Long memberId, @PathVariable long id) {
         boardService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateBoard(@PathVariable long id,
+    public ResponseEntity<?> updateBoard(@AuthenticationPrincipal Long memberId,
+                                         @PathVariable long id,
                                          @RequestBody BoardDTO boardDTO){
         Board updatedBoard = boardService.update(id, boardDTO);
         ResponseDTO<Board> response = ResponseDTO.<Board>builder().board(updatedBoard).build();
